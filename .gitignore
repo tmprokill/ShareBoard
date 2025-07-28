@@ -52,3 +52,10 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+UI/**/*DS_Store
+UI/**/*node_modules/
+
+# React Router
+UI/**/*.react-router/
+UI/**/*build/

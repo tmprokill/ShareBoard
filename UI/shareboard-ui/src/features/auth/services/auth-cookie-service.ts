@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { AuthCookie, AuthCookiePayload } from "../models/authCookie";
-import { CookieConstants } from "../../../constants";
+import { CookieConstants } from "../../../common/constants";
 
 export class AuthCookieService {
   public static getAuthCookies(): AuthCookie {

@@ -3,7 +3,8 @@ import { AppUser } from "./models/appuser";
 import { AuthCookieService } from "./services/auth-cookie-service";
 import { AuthCookie } from "./models/authCookie";
 
-interface AuthState {
+export interface AuthState {
+  isTokenValid: boolean;
   isAuthenticated: boolean;
   user?: AppUser;
 }
@@ -13,6 +14,7 @@ const initialState: AuthState = (() => {
 
   let user: AppUser | undefined;
   let isAuthenticated = false;
+  const isTokenValid = true;
 
   if (
     authCookie.jwt !== undefined &&
@@ -28,14 +30,14 @@ const initialState: AuthState = (() => {
     AuthCookieService.removeAuthCookies();
   }
 
-  return { isAuthenticated, user };
+  return { isTokenValid, isAuthenticated, user };
 })();
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login(
+    authorize(
       state,
       action: PayloadAction<{ jwt: string; username: string; email: string }>
     ) {
@@ -50,12 +52,17 @@ const authSlice = createSlice({
         email: action.payload.email,
       });
     },
-    logout(state) {
+    unauthorize(state) {
       state.user = undefined;
       state.isAuthenticated = false;
       AuthCookieService.removeAuthCookies();
     },
+    setInvalidToken(state) {
+      state.isTokenValid = false;
+    }
   },
 });
 
 export default authSlice.reducer;
+
+export const { unauthorize, authorize, setInvalidToken } = authSlice.actions;

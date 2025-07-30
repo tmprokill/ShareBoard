@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import i18n from '../../i18n';
-import { AppSettingDefaultConstants } from '../constants';
+import { AppSettingDefaults } from '../constants';
 
 interface AppSettings {
   language: string;
 }
 
 const initialState: AppSettings = {
-  language: i18n.language || AppSettingDefaultConstants.DEFAULT_LANGUAGE,
+  language: i18n.language || AppSettingDefaults.DEFAULT_LANGUAGE,
 };
 
 export const appSettingsSlice = createSlice({

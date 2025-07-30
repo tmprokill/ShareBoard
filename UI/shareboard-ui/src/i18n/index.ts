@@ -4,7 +4,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 import en from "./locales/en/translation.json";
 import uk from "./locales/uk/translation.json";
-import { AppSettingDefaultConstants } from "../common/constants";
+import { AppSettingDefaults } from "../common/constants";
 
 i18n
   .use(LanguageDetector)
@@ -14,8 +14,8 @@ i18n
       en: { translation: en },
       uk: { translation: uk },
     },
-    lng: localStorage.getItem("i18nextLng") || AppSettingDefaultConstants.DEFAULT_LANGUAGE, 
-    fallbackLng: AppSettingDefaultConstants.FALLBACK_LANGUAGE,
+    lng: localStorage.getItem("i18nextLng") || AppSettingDefaults.DEFAULT_LANGUAGE, 
+    fallbackLng: AppSettingDefaults.FALLBACK_LANGUAGE,
     detection: {
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],

@@ -1,13 +1,14 @@
+import "./index.css";
 import { StrictMode } from "react";
 import { ToastContainer } from "react-toastify";
 import { createRoot } from "react-dom/client";
-import "./index.css";
 import App from "./App.tsx";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./common/app/query-client.ts";
 import { BrowserRouter } from "react-router";
 import { Provider } from "react-redux";
 import { store } from "./common/app/store.ts";
+import './i18n'
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

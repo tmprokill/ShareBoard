@@ -1,0 +1,20 @@
+{
+  "login": {
+    "placeholders": {
+      "login": "Введіть логін",
+      "password": "Введіть пароль"
+    },
+    "buttons": {
+      "login-submit": "Увійти до свого облікового запису"
+    },
+    "errors": {
+      "login-required": "Поле логіну є обов’язковим",
+      "password-required": "Поле паролю є обов’язковим"
+    }
+  },
+  "auth": {
+    "errors":{
+      "unauthorized": "Please, login into the system"
+    }
+  }
+}

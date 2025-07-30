@@ -7,25 +7,32 @@ import { AuthState, unauthorize } from "./features/auth/auth-slice";
 import HomePage from "./features/home/components/homepage";
 import { store } from "./common/app/store";
 import LoginPage from "./features/auth/components/loginpage";
+import { useTranslation } from "react-i18next";
+import { Header } from "./features/layout/header/header";
+import { Footer } from "./features/layout/footer/footer";
 
 function App() {
   const navigate = useNavigate();
-
+  const {t} = useTranslation();
   const isTokenValid = useSelector((state: AuthState) => state.isTokenValid);
 
   useEffect(() => {
     if (isTokenValid == false) {
-      toast.error("Please, log in into the system");
+      toast.error(t("auth.errors.unauthorized"));
       store.dispatch(unauthorize());
       navigate("/login");
     }
-  }, [isTokenValid, navigate]);
+  }, [isTokenValid, navigate, t]);
 
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-    </Routes>
+    <>
+      <Header />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+      <Footer />
+    </>
   );
 }
 

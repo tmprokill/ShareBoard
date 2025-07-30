@@ -8,7 +8,7 @@ import { RegisterModel } from "../models/register-model";
 export class AuthApiService {
   private controller = "/auth";
 
-  async login(loginModel: LoginModel): Promise<ApiResponse<LoginResponse>> {
+  async loginAsync(loginModel: LoginModel): Promise<ApiResponse<LoginResponse>> {
     const res = await axiosClient.post<ApiResponse<LoginResponse>>(
       this.controller + "login",
       loginModel
@@ -17,7 +17,7 @@ export class AuthApiService {
     return res.data;
   }
 
-  async register(registerModel: RegisterModel): Promise<ApiResponse<null>> {
+  async registerAsync(registerModel: RegisterModel): Promise<ApiResponse<null>> {
     const res = await axiosClient.post<ApiResponse<null>>(
       this.controller + "register",
       registerModel
@@ -26,7 +26,7 @@ export class AuthApiService {
     return res.data;
   }
 
-  async logout(): Promise<ApiResponse<null>> {
+  async logoutAsync(): Promise<ApiResponse<null>> {
     const res = await axiosClient.get<ApiResponse<null>>(
       this.controller + "logout",
       {

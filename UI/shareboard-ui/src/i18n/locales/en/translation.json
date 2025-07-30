@@ -1,0 +1,20 @@
+{
+  "login": {
+    "placeholders": {
+      "login": "Enter the login",
+      "password": "Enter the password"
+    },
+    "buttons": {
+      "login-submit": "Press to login into your account"
+    },
+    "errors": {
+      "login-required": "The login field is required",
+      "password-required": "The password field is required"
+    }
+  },
+  "auth": {
+    "errors":{
+      "unauthorized": "Please, login into the system"
+    }
+  }
+}

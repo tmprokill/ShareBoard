@@ -2,7 +2,7 @@
 
 public enum ErrorType
 {
-    Problem = 0,
+    Unauthorized = 0,
     Validation = 1,
     NotFound = 2,
     Conflict = 3,
@@ -23,10 +23,10 @@ public record Error
     public string Description { get; init; }
     public ErrorType Type { get; init; }
 
-    public static Error InternalServerError = new(string.Empty, string.Empty, ErrorType.InternalServer);
+    public static Error InternalServerError(string code, string description) => new(code, description, ErrorType.InternalServer);
     public static Error NotFound(string code, string description) => new(code, description, ErrorType.NotFound);
     public static Error Validation(string code, string description) => new(code, description, ErrorType.Validation);
-    public static Error Problem(string code, string description) => new(code, description, ErrorType.Problem);
+    public static Error Unauthorized(string code, string description) => new(code, description, ErrorType.Unauthorized);
     public static Error Conflict(string code, string description) => new(code, description, ErrorType.Conflict);
     public static Error None(string code, string description) => new(code, description, ErrorType.None);
 }

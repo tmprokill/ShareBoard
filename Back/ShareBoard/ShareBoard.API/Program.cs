@@ -6,7 +6,7 @@ namespace ShareBoard.API;
 
 public class Program
 {
-    public static async Task Main(string[] args)
+    public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         
@@ -16,7 +16,7 @@ public class Program
 
         app.Configure();
 
-        await app.RunAsync();
+        app.Run();
         //All configurations are located in the configurations folder and are created
         //as extension methods to better separate the code. To add services to DI go
         //to ConfigureBuilder.cs.

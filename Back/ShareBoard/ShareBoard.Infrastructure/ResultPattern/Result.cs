@@ -2,9 +2,20 @@
 
 public class Result
 {
+    protected Result(bool isSuccess, Error error)
+    {
+        this.IsSuccess = isSuccess;
+        this.Error = error;
+    }
+    
     public bool IsSuccess { get; protected set; }
     
     public Error Error { get; protected set; }
+    
+    public static Result Failure(Error error)
+    {
+        return new Result(false, error);
+    }
 }
 
 public class Result<T> : Result
@@ -12,10 +23,9 @@ public class Result<T> : Result
     public T Value { get; private set; }
 
     private Result(bool isSuccess, T value, Error error)
+        : base(isSuccess, error)
     {
-        IsSuccess = isSuccess;
         Value = value;
-        Error = error;
     }
 
     public static Result<T> Success(T value)
@@ -23,8 +33,8 @@ public class Result<T> : Result
         return new Result<T>(true, value, null);
     }
 
-    public static Result<T> Failure(Error error)
+    public static Result<T> Failure(Error error, T value = default)
     {
-        return new Result<T>(false, default, error);
+        return new Result<T>(false, value, error);
     }
 }

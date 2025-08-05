@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ShareBoard.API.ApiResult;
 using ShareBoard.Infrastructure.ResultPattern;
@@ -8,11 +9,11 @@ namespace ShareBoard.API.Controllers;
 [Route("[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly ILogger<AuthController> _logger;
+    private readonly IMapper _mapper;
 
-    public AuthController(ILogger<AuthController> logger)
+    public AuthController(IMapper mapper)
     {
-        _logger = logger;
+        _mapper = mapper;
     }
 
     [HttpGet("auth")]
@@ -22,7 +23,7 @@ public class AuthController : ControllerBase
 
         return result.Match(
             success: x => Ok(x),
-            failure: ApiResults.Problem
+            failure: ApiResults.ToProblemDetails
         );
     }
 }

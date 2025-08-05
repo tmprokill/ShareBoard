@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using ShareBoard.API.Exceptions;
 using ShareBoard.Domain.Models.Auth;
 using ShareBoard.Infrastructure.Configurations;
 using ShareBoard.Infrastructure.Data;
@@ -23,7 +25,7 @@ public static class ConfigureBuilder
         });
 
         //settings for the user to hold the identity
-        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
@@ -41,10 +43,15 @@ public static class ConfigureBuilder
             })
             .AddDefaultTokenProviders()
             .AddEntityFrameworkStores<ApplicationDbContext>();
+        
         builder.Services.AddControllers();
 
         builder.Services.AddEndpointsApiExplorer();
+        AddSwagger(builder);
 
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
+        
         builder.Services.AddAuthorization();
 
         builder.Services.AddAuthentication(options =>
@@ -66,5 +73,37 @@ public static class ConfigureBuilder
             });
         
         builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AuthMappingProfile>());
+    }
+    
+    public static void AddSwagger(this WebApplicationBuilder builder)
+    {
+        var services = builder.Services;
+        services.AddSwaggerGen(option =>
+        {
+            option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+            option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter a valid token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            });
+            option.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] { }
+                }
+            });
+        });
     }
 }

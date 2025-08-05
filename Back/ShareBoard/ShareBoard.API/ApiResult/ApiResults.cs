@@ -5,7 +5,7 @@ namespace ShareBoard.API.ApiResult;
 
 public class ApiResults
 {
-    public static IActionResult Problem(Result result)
+    public static IActionResult ToProblemDetails(Result result)
     {
         if (result.IsSuccess)
         {
@@ -14,21 +14,36 @@ public class ApiResults
 
         var problemDetails = new ProblemDetails
         {
-            Title = result.Error.Code,
-            Detail = result.Error.Description,
             Status = GetStatusCode(result.Error.Type),
+            Title = result.Error.Code,
+            Type = GetType(result.Error.Type),
+            Detail = result.Error.Description,
+            Extensions = new Dictionary<string, object?>
+            {
+                { "errors", new[] { result.Error } }
+            }
         };
 
         return new ObjectResult(problemDetails);
-
-        static int GetStatusCode(ErrorType errorType) =>
-            errorType switch
-            {
-                ErrorType.Validation => StatusCodes.Status400BadRequest,
-                ErrorType.Problem => StatusCodes.Status401Unauthorized,
-                ErrorType.Conflict => StatusCodes.Status409Conflict,
-                ErrorType.NotFound => StatusCodes.Status404NotFound,
-                _ => StatusCodes.Status500InternalServerError,
-            };
     }
+
+    public static int GetStatusCode(ErrorType errorType) =>
+        errorType switch
+        {
+            ErrorType.Validation => StatusCodes.Status400BadRequest,
+            ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            ErrorType.Conflict => StatusCodes.Status409Conflict,
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            _ => StatusCodes.Status500InternalServerError,
+        };
+
+    public static string GetType(ErrorType errorType) =>
+        errorType switch
+        {
+            ErrorType.Validation => "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            ErrorType.NotFound => "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+            ErrorType.Conflict => "https://tools.ietf.org/html/rfc7231#section-6.5.8",
+            ErrorType.Unauthorized => "https://tools.ietf.org/html/rfc7235#section-3.1", // 401 Unauthorized
+            _ => "https://tools.ietf.org/html/rfc7231#section-6.6.1", // 500 Internal Server Error
+        };
 }

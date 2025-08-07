@@ -1,4 +1,4 @@
-﻿namespace ShareBoard.Infrastructure.Configurations;
+﻿namespace ShareBoard.Infrastructure.Common.JWT;
 
 public class JWTConfig
 {

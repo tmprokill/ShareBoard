@@ -6,4 +6,14 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ShareBoard.Domain\ShareBoard.Domain.csproj" />
+      <ProjectReference Include="..\ShareBoard.Infrastructure\ShareBoard.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>

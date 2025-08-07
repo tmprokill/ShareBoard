@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace ShareBoard.Infrastructure.Mappers.Auth;
+namespace ShareBoard.Infrastructure.Common.Mappers.Auth;
 
 public class AuthMappingProfile : Profile
 {

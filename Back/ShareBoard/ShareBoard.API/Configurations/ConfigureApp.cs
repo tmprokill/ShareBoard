@@ -5,15 +5,20 @@ public static class ConfigureApp
     public static void Configure(this WebApplication app)
     {
         var config = app.Configuration;
+
+        app.UseExceptionHandler();
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        
-        app.UseHttpsRedirection();
 
-        app.UseCors((options) =>
+        app.UseHttpsRedirection();
+        
+        app.UseRouting();
+        
+        app.UseCors(options =>
         {
             options
                 .AllowAnyMethod()
@@ -21,12 +26,10 @@ public static class ConfigureApp
                 .AllowCredentials()
                 .WithOrigins(config.GetSection("ApplicationURLs")["FrontEnd"] ?? "monkey sigma");
         });
-
-
+        
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.UseExceptionHandler();
         app.MapControllers();
     }
 }

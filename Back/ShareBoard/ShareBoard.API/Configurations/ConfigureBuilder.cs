@@ -6,9 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShareBoard.API.Exceptions;
 using ShareBoard.Domain.Models.Auth;
-using ShareBoard.Infrastructure.Configurations;
+using ShareBoard.Infrastructure.Common.JWT;
+using ShareBoard.Infrastructure.Common.Mappers.Auth;
 using ShareBoard.Infrastructure.Data;
-using ShareBoard.Infrastructure.Mappers.Auth;
 
 namespace ShareBoard.API.Configurations;
 
@@ -19,12 +19,13 @@ public static class ConfigureBuilder
         var services = builder.Services;
         var jwtConfig = builder.Configuration.GetSection("JwtConfig").Get<JWTConfig>();
 
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        
         services.AddDbContext<ApplicationDbContext>(opts =>
         {
             opts.UseSqlServer(builder.Configuration.GetConnectionString("DataContext"));
         });
-
-        //settings for the user to hold the identity
+        
         services.AddIdentity<ApplicationUser, IdentityRole<int>>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -49,7 +50,6 @@ public static class ConfigureBuilder
         builder.Services.AddEndpointsApiExplorer();
         AddSwagger(builder);
 
-        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
         builder.Services.AddProblemDetails();
         
         builder.Services.AddAuthorization();
@@ -75,12 +75,12 @@ public static class ConfigureBuilder
         builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AuthMappingProfile>());
     }
     
-    public static void AddSwagger(this WebApplicationBuilder builder)
+    private static void AddSwagger(this WebApplicationBuilder builder)
     {
         var services = builder.Services;
         services.AddSwaggerGen(option =>
         {
-            option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+            option.SwaggerDoc("v1", new OpenApiInfo { Title = "ShareBoard API", Version = "v1" });
             option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 In = ParameterLocation.Header,

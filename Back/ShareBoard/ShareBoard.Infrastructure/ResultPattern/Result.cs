@@ -1,11 +1,14 @@
-﻿namespace ShareBoard.Infrastructure.ResultPattern;
+﻿using ShareBoard.Infrastructure.Common.Errors;
+using ShareBoard.Infrastructure.Errors;
+
+namespace ShareBoard.Infrastructure.ResultPattern;
 
 public class Result
 {
     protected Result(bool isSuccess, Error error)
     {
-        this.IsSuccess = isSuccess;
-        this.Error = error;
+        IsSuccess = isSuccess;
+        Error = error;
     }
     
     public bool IsSuccess { get; protected set; }

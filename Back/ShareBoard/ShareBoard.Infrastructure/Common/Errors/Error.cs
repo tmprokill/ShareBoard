@@ -1,4 +1,4 @@
-﻿namespace ShareBoard.Infrastructure.ResultPattern;
+﻿namespace ShareBoard.Infrastructure.Common.Errors;
 
 public enum ErrorType
 {
@@ -14,9 +14,9 @@ public record Error
 {
     private Error(string code, string description, ErrorType type)
     {
-        this.Code = code;
-        this.Description = description;
-        this.Type = type;
+        Code = code;
+        Description = description;
+        Type = type;
     }
 
     public string Code { get; init; }

@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ShareBoard.Infrastructure.Common.Errors;
-using ShareBoard.Infrastructure.Errors;
-using ShareBoard.Infrastructure.ResultPattern;
+using ShareBoard.Infrastructure.Common.ResultPattern;
 
 namespace ShareBoard.API.ApiResult;
 
 public static class ApiResults
 {
-    //Add success
     public static IActionResult ToProblemDetails(Result result)
     {
         if (result.IsSuccess)

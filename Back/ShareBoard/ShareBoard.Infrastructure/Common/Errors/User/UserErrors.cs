@@ -1,6 +1,4 @@
-﻿using ShareBoard.Infrastructure.Common.Errors;
-
-namespace ShareBoard.Infrastructure.Errors.User;
+﻿namespace ShareBoard.Infrastructure.Common.Errors.User;
 
 public static class UserErrors
 {

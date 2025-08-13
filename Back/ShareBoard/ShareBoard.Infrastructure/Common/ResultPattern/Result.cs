@@ -1,7 +1,6 @@
 ﻿using ShareBoard.Infrastructure.Common.Errors;
-using ShareBoard.Infrastructure.Errors;
 
-namespace ShareBoard.Infrastructure.ResultPattern;
+namespace ShareBoard.Infrastructure.Common.ResultPattern;
 
 public class Result
 {

@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using ShareBoard.API.ApiResult;
 using ShareBoard.Infrastructure.Common.Errors;
-using ShareBoard.Infrastructure.Errors;
-using ShareBoard.Infrastructure.ResultPattern;
+using ShareBoard.Infrastructure.Common.ResultPattern;
 
 namespace ShareBoard.API.Exceptions;
 

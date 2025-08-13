@@ -6,7 +6,6 @@ import { useNavigate } from "react-router";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginModel } from "../models/login-model";
 import { useLoginMutation } from "../services/react-query";
-import { APIConstants } from "../../../common/constants";
 import { useTranslation } from "react-i18next";
 
 function LoginPage() {
@@ -30,7 +29,7 @@ function LoginPage() {
       password: data.password,
     });
 
-    if (result.status == APIConstants.SUCCESS_RESPONSE) {
+    if (result.success == true) {
       navigate("/");
       return;
     } else {

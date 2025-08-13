@@ -10,14 +10,9 @@ export const AppSettingDefaults = {
   THEME: "light",
 };
 
-export const APIConstants = {
-  SUCCESS_RESPONSE: "ok",
-  ERROR_RESPONSE: "error",
-};
-
 export const Routes = {
   LOGIN: "/login",
   REGISTER: "/register",
   HOME: "/",
 };
-export const baseUrl = 'http://localhost:3030';
+export const baseUrl = 'http://localhost:5148';

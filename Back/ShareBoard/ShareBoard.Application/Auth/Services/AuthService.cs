@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using ShareBoard.Application.Auth.Interfaces;
 using ShareBoard.Domain.Models.Auth;
+using ShareBoard.Infrastructure.Common.Errors.User;
 using ShareBoard.Infrastructure.Common.JWT;
-using ShareBoard.Infrastructure.Errors.User;
-using ShareBoard.Infrastructure.ResultPattern;
+using ShareBoard.Infrastructure.Common.ResultPattern;
 
 namespace ShareBoard.Application.Auth.Services;
 

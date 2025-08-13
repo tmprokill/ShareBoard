@@ -1,7 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ShareBoard.API.ApiResult;
-using ShareBoard.Infrastructure.ResultPattern;
+using ShareBoard.Infrastructure.Common.ResultPattern;
 
 namespace ShareBoard.API.Controllers;
 
@@ -16,13 +16,28 @@ public class AuthController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("auth")]
-    public async Task<IActionResult> Auth()
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginAsync()
     {
         var result = Result<int>.Success(2);
 
         return result.Match(
-            success: x => Ok(x),
+            successStatusCode: 200,
+            includeBody: false,
+            message: "null",
+            failure: ApiResults.ToProblemDetails
+        );
+    }
+    
+    [HttpPost("register")]
+    public async Task<IActionResult> RegisterAsync()
+    {
+        var result = Result<int>.Success(2);
+
+        return result.Match(
+            successStatusCode: 200,
+            includeBody: false,
+            message: "null",
             failure: ApiResults.ToProblemDetails
         );
     }

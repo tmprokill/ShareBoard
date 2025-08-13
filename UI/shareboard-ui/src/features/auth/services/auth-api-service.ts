@@ -1,20 +1,24 @@
 import { axiosClient, getJWTHeader } from "../../../common/app/axios";
-import { ApiResponse } from "../../../common/models/api-response";
+import { ApiResponse } from "../../../common/models/api-responses";
 import { LoginResponse } from "../models/login-response";
 import { LoginModel } from "../models/login-model";
 import { AuthCookieService } from "./auth-cookie-service";
 import { RegisterModel } from "../models/register-model";
+import { apiRequest } from "../../../common/services/api-request-handler";
 
 export class AuthApiService {
   private controller = "/auth";
 
   async loginAsync(loginModel: LoginModel): Promise<ApiResponse<LoginResponse>> {
-    const res = await axiosClient.post<ApiResponse<LoginResponse>>(
-      this.controller + "login",
-      loginModel
+    const res = await apiRequest<LoginResponse>(
+      {
+        method: 'get',
+        url: this.controller + "/auth",
+        data: loginModel
+      }
     );
 
-    return res.data;
+    return res;
   }
 
   async registerAsync(registerModel: RegisterModel): Promise<ApiResponse<null>> {

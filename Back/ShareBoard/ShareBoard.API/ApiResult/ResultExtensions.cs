@@ -1,15 +1,36 @@
-﻿using ShareBoard.Infrastructure.ResultPattern;
+﻿using Microsoft.AspNetCore.Mvc;
+using ShareBoard.Infrastructure.Common.ResultPattern;
 
 namespace ShareBoard.API.ApiResult;
 
 public static class ResultExtensions
 {
-    public static TOut Match<TIn, TOut>(
-        this Result<TIn> result,
-        Func<TIn, TOut> success,
-        Func<Result<TIn>, TOut> failure
+    public static IActionResult Match<T>(
+        this Result<T> result,
+        int successStatusCode,
+        bool includeBody,
+        string message,
+        Func<Result<T>, IActionResult>? failure = null
     )
     {
-        return result.IsSuccess ? success(result.Value) : failure(result);
+        if (result.IsSuccess)
+        {
+            if (includeBody)
+            {
+                var body = new ApiResponse<T>
+                {
+                    Message = message,
+                    Data = result.Value
+                };
+                
+                return new ObjectResult(body) { StatusCode = successStatusCode };
+            }
+            
+            return new StatusCodeResult(successStatusCode);
+        }
+        
+        return failure != null
+            ? failure(result)
+            : ApiResults.ToProblemDetails(result);
     }
 }

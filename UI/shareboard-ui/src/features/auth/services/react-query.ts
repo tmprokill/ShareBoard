@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AuthApiService } from "./auth-api-service";
-import { ApiResponse } from "../../../common/models/api-response";
+import { ApiResponse } from "../../../common/models/api-responses";
 import { LoginResponse } from "../models/login-response";
 import { authorize } from "../auth-slice";
 import { LoginModel } from "../models/login-model";
@@ -13,11 +13,13 @@ export function useLoginMutation() {
     mutationFn: (data: LoginModel) =>
       authApiService.loginAsync({ login: data.login, password: data.password }),
     onSuccess: (response: ApiResponse<LoginResponse>) => {
-      authorize({
-        jwt: response.data.jwt,
-        username: response.data.username,
-        email: response.data.email,
-      });
+      if(response.success){
+        authorize({
+          jwt: response.data!.jwt,
+          username: response.data!.username,
+          email: response.data!.email,
+        });
+      }
     },
   });
 }

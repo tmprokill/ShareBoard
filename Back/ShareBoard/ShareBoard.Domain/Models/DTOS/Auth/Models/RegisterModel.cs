@@ -1,4 +1,4 @@
-﻿namespace ShareBoard.API.DTOS.Auth.Models;
+﻿namespace ShareBoard.Domain.Models.DTOS.Auth.Models;
 
 public class RegisterModel
 {

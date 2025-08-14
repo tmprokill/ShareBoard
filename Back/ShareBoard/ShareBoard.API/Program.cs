@@ -4,16 +4,16 @@ namespace ShareBoard.API;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
         
         builder.Configure();
-
+        
         var app = builder.Build();
 
-        app.Configure();
+        await app.Configure();
 
-        app.Run();
+        await app.RunAsync();
     }
 }

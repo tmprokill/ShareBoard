@@ -1,10 +1,14 @@
-﻿using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using ShareBoard.Application.Auth.Interfaces;
+using ShareBoard.Domain.Models;
 using ShareBoard.Domain.Models.Auth;
+using ShareBoard.Domain.Models.DTOS.Auth.Models;
+using ShareBoard.Infrastructure.Common.Errors.Repository;
 using ShareBoard.Infrastructure.Common.Errors.User;
 using ShareBoard.Infrastructure.Common.JWT;
 using ShareBoard.Infrastructure.Common.ResultPattern;
+using ShareBoard.Infrastructure.Data;
 
 namespace ShareBoard.Application.Auth.Services;
 
@@ -17,14 +21,22 @@ public class AuthService : IAuthService
     private readonly ITokenService _tokenService;
 
     private readonly IRoleService _roleService;
+    
+    private readonly ApplicationDbContext _context;
 
-    public AuthService(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager,
-        ITokenService tokenService, IRoleService roleService)
+    public AuthService(
+        SignInManager<ApplicationUser> signInManager, 
+        UserManager<ApplicationUser> userManager,
+        ITokenService tokenService, 
+        IRoleService roleService,
+        ApplicationDbContext context
+        )
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _tokenService = tokenService;
         _roleService = roleService;
+        _context = context;
     }
 
     private Result<string> GenerateToken(ApplicationUser user)
@@ -55,37 +67,46 @@ public class AuthService : IAuthService
         return Result<IEnumerable<string>>.Failure(UserErrors.UserNotFoundError);
     }
 
-    // public async Task<Result<string>> RegisterAsync(RegisterUserDTO user)
-    // {
-    //     try
-    //     {
-    //         var appUser = new ApplicationUser()
-    //         {
-    //             UserName = user.UserName,
-    //             Email = user.Email,
-    //         };
-    //
-    //         var result = await _userManager.CreateAsync(appUser, user.Password);
-    //
-    //         if (!result.Succeeded)
-    //         {
-    //             return Result<string>.Failure(UserErrors.UserNotCreatedError);
-    //         }
-    //
-    //         var resRoles = await _roleService.AddToRolesAsync(appUser, user.Role);
-    //
-    //         var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
-    //
-    //         //await _emailService.SendConfirmationLinkAsync(user.Email, emailToken);
-    //
-    //         return Result<string>.Success(
-    //             $"Your account was created, now go to the {user.Email} and confirm your email address.");
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         return Result<string>.Failure(e.Message);
-    //     }
-    // }
+    public async Task<Result<bool>> RegisterAsync(RegisterModel registerModel)
+    {
+        await _context.Database.BeginTransactionAsync();
+        try
+        {
+            var appUser = new ApplicationUser
+            {
+                UserName = registerModel.UserName,
+                Email = registerModel.Email,
+            };
+    
+            var userResult = await _userManager.CreateAsync(appUser, registerModel.Password);
+    
+            if (!userResult.Succeeded)
+            {
+                await _context.Database.RollbackTransactionAsync();
+                return Result<bool>.Failure(UserErrors.UserNotCreatedError);
+            }
+            
+            var resRolesResult = await _roleService.AddToRolesAsync(appUser, UserRoles.User);
+    
+
+            if (resRolesResult == false)
+            {
+                await _context.Database.RollbackTransactionAsync();
+                return Result<bool>.Failure(UserErrors.UserNotAssignedToRole);
+            }
+            
+            var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+            //await _emailService.SendConfirmationLinkAsync(user.Email, emailToken);
+            
+            await _context.Database.CommitTransactionAsync();
+            return Result<bool>.Success(true);
+        }
+        catch (DbUpdateException ex)
+        {
+            await _context.Database.RollbackTransactionAsync();
+            return Result<bool>.Failure(RepositoryErrorMapper<ApplicationUser>.Map(ex));
+        }
+    }
     //
     // public async Task<Result<string>> ConfirmEmailAsync(string email, string token)
     // {

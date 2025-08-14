@@ -15,20 +15,20 @@ export async function apiRequest<T>(config: AxiosRequestConfig): Promise<ApiResp
     const error = err as AxiosError;
 
     let apiError: ProblemDetails = {
-      status: 400,
-      title: "",
-      type: "string",
-      detail: "string",
+      status: 500,
+      title: "Internal Server Error",
+      type: "Application.Error",
+      detail: "It's over",
       errors: [],
     };
 
     if (error.response?.data) {
       const data = error.response.data as ProblemDetails;
-
+      
       // Handle ProblemDetails format
       if (data.title || data.detail) {
         apiError = {
-          status: 400,
+          status: data.status,
           title: data.title,
           type: data.type,
           detail:  data.detail,
@@ -39,7 +39,7 @@ export async function apiRequest<T>(config: AxiosRequestConfig): Promise<ApiResp
 
     return {
       success: false,
-      message: "ok",
+      message: apiError.detail || apiError.title || "Unknown error",
       error: apiError
     };
   }

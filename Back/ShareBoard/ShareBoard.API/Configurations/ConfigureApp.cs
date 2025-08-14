@@ -1,8 +1,10 @@
-﻿namespace ShareBoard.API.Configurations;
+﻿using ShareBoard.Infrastructure.Data;
+
+namespace ShareBoard.API.Configurations;
 
 public static class ConfigureApp
 {
-    public static void Configure(this WebApplication app)
+    public static async Task Configure(this WebApplication app)
     {
         var config = app.Configuration;
 
@@ -14,6 +16,13 @@ public static class ConfigureApp
             app.UseSwaggerUI();
         }
 
+        using (var scope = app.Services.CreateScope())
+        {
+            var seeder = new DatabaseSeeder(scope);
+            await seeder.SeedAsync();
+        }
+
+        
         app.UseHttpsRedirection();
         
         app.UseRouting();

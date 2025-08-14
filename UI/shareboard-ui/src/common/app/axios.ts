@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { baseUrl } from "../constants";
 import { setInvalidToken } from "../../features/auth/auth-slice"
-import { store } from "./store";
+import { store } from "./redux/store";
 
 export function getJWTHeader(userToken: string): Record<string, string> {
   return { Authorization: `Bearer ${userToken}` };

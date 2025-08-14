@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ShareBoard.Application\ShareBoard.Application.csproj" />
       <ProjectReference Include="..\ShareBoard.Infrastructure\ShareBoard.Infrastructure.csproj" />
     </ItemGroup>
 

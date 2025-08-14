@@ -1,4 +1,4 @@
-﻿namespace ShareBoard.API.DTOS.Auth.Responses;
+﻿namespace ShareBoard.Domain.Models.DTOS.Auth.Responses;
 
 public class LoginResponse
 {

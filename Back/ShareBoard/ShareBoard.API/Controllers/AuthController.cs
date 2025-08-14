@@ -1,6 +1,8 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ShareBoard.API.ApiResult;
+using ShareBoard.Application.Auth.Interfaces;
+using ShareBoard.Domain.Models.DTOS.Auth.Models;
 using ShareBoard.Infrastructure.Common.ResultPattern;
 
 namespace ShareBoard.API.Controllers;
@@ -9,11 +11,11 @@ namespace ShareBoard.API.Controllers;
 [Route("[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IMapper _mapper;
+    private readonly IAuthService _authService;
 
-    public AuthController(IMapper mapper)
+    public AuthController(IAuthService authService)
     {
-        _mapper = mapper;
+        _authService = authService;
     }
 
     [HttpPost("login")]
@@ -30,12 +32,12 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("register")]
-    public async Task<IActionResult> RegisterAsync()
+    public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
     {
-        var result = Result<int>.Success(2);
+        var result = await _authService.RegisterAsync(model);
 
         return result.Match(
-            successStatusCode: 200,
+            successStatusCode: 201,
             includeBody: false,
             message: "null",
             failure: ApiResults.ToProblemDetails

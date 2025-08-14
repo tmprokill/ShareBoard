@@ -11,10 +11,9 @@ namespace ShareBoard.Infrastructure.Repository.Services;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
-//Wrong exception handling, i don't like it at all
 public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 {
-    protected readonly ApplicationDbContext _context;
+    public readonly ApplicationDbContext _context;
 
     public GenericRepository(ApplicationDbContext context)
     {
@@ -43,9 +42,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             var result = await query.Where(condition).ToListAsync();
             return Result<IEnumerable<T>>.Success(result);
         }
-        catch (NullReferenceException ex)
+        catch (DbUpdateException ex)
         {
-            return Result<IEnumerable<T>>.Failure(RepositoryErrors.FetchError);
+            return Result<IEnumerable<T>>.Failure(RepositoryErrorMapper<T>.Map(ex));
         }
     }
 
@@ -69,14 +68,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
 
             if (result == null)
             {
-                return Result<T>.Failure(RepositoryErrors.NotFoundError);
+                return Result<T>.Failure(RepositoryErrors<T>.NotFoundError);
             }
 
             return Result<T>.Success(result);
         }
-        catch (NullReferenceException ex)
+        catch (DbUpdateException ex)
         {
-            return Result<T>.Failure(RepositoryErrors.FetchError);
+            return Result<T>.Failure(RepositoryErrorMapper<T>.Map(ex));
         }
     }
 
@@ -88,9 +87,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             await SaveAsync();
             return Result<int>.Success(item.Id);
         }
-        catch (NullReferenceException ex)
+        catch (DbUpdateException ex)
         {
-            return Result<int>.Failure(RepositoryErrors.AddError);
+            return Result<int>.Failure(RepositoryErrorMapper<T>.Map(ex));
         }
     }
 
@@ -102,9 +101,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             await SaveAsync();
             return Result<bool>.Success(true);
         }
-        catch (NullReferenceException ex)
+        catch (DbUpdateException ex)
         {
-            return Result<bool>.Failure(RepositoryErrors.AddError);
+            return Result<bool>.Failure(RepositoryErrors<T>.AddError);
         }
     }
 
@@ -116,9 +115,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             await SaveAsync();
             return Result<bool>.Success(true);
         }
-        catch (NullReferenceException ex)
+        catch (DbUpdateException ex)
         {
-            return Result<bool>.Failure(RepositoryErrors.UpdateError);
+            return Result<bool>.Failure(RepositoryErrorMapper<T>.Map(ex));
         }
     }
 
@@ -129,16 +128,16 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             var entity = await Table.FirstOrDefaultAsync(condition);
             if (entity == null)
             {
-                return Result<bool>.Failure(RepositoryErrors.NotFoundError);
+                return Result<bool>.Failure(RepositoryErrors<T>.NotFoundError);
             }
 
             Table.Remove(entity);
             await SaveAsync();
             return Result<bool>.Success(true);
         }
-        catch (NullReferenceException ex)
+        catch (DbUpdateException ex)
         {
-            return Result<bool>.Failure(RepositoryErrors.DeleteError);
+            return Result<bool>.Failure(RepositoryErrorMapper<T>.Map(ex));
         }
     }
 
@@ -187,9 +186,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             var result = await PagedList<T>.CreateAsync(orderedQuery, pageNumber, pageSize);
             return Result<PagedList<T>>.Success(result);
         }
-        catch (Exception ex)
+        catch (DbUpdateException ex)
         {
-            return Result<PagedList<T>>.Failure(RepositoryErrors.FetchError);
+            return Result<PagedList<T>>.Failure(RepositoryErrorMapper<T>.Map(ex));
         }
     }
 

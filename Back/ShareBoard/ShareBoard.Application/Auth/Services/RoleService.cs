@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ShareBoard.Application.Auth.Interfaces;
+using ShareBoard.Domain.Models;
 using ShareBoard.Domain.Models.Auth;
 
 namespace ShareBoard.Application.Auth.Services;
@@ -26,10 +27,6 @@ public class RoleService : IRoleService
                 res = await AddToModeratorAsync(user);
                 result = res.Succeeded;
                 break;
-            case UserRoles.Cook:
-                res = await AddToCookAsync(user);
-                result = res.Succeeded;
-                break;
             case UserRoles.User:
                 res = await AddToUserAsync(user);
                 result = res.Succeeded;
@@ -51,16 +48,9 @@ public class RoleService : IRoleService
 
     private async Task<IdentityResult> AddToModeratorAsync(ApplicationUser user)
     {
-        var res = await AddToCookAsync(user);
-        if (!res.Succeeded) return res;
-        return await _userManager.AddToRoleAsync(user, UserRoles.Moderator);
-    }
-
-    private async Task<IdentityResult> AddToCookAsync(ApplicationUser user)
-    {
         var res = await AddToUserAsync(user);
         if (!res.Succeeded) return res;
-        return await _userManager.AddToRoleAsync(user, UserRoles.Cook);
+        return await _userManager.AddToRoleAsync(user, UserRoles.Moderator);
     }
 
     private async Task<IdentityResult> AddToUserAsync(ApplicationUser user)

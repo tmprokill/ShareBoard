@@ -15,4 +15,5 @@ export const Routes = {
   REGISTER: "/register",
   HOME: "/",
 };
+
 export const baseUrl = 'http://localhost:5148';

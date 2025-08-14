@@ -5,11 +5,12 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { AuthState, unauthorize } from "./features/auth/auth-slice";
 import HomePage from "./features/home/components/homepage";
-import { store } from "./common/app/store";
+import { store } from "./common/app/redux/store";
 import LoginPage from "./features/auth/components/loginpage";
 import { useTranslation } from "react-i18next";
 import { Header } from "./features/layout/header/header";
 import { Footer } from "./features/layout/footer/footer";
+import RegisterPage from "./features/auth/components/registerpage";
 
 function App() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
       <Footer />
     </>

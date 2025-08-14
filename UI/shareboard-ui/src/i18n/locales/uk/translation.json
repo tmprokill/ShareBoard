@@ -12,9 +12,27 @@
       "password-required": "Поле паролю є обов’язковим"
     }
   },
+  "register": {
+    "placeholders": {
+      "email": "Введіть вашу електронну адресу",
+      "username": "Виберіть ім'я користувача",
+      "password": "Введіть пароль",
+      "confirm-password": "Підтвердіть пароль"
+    },
+    "buttons": {
+      "register-submit": "Зареєструватися"
+    },
+    "errors": {
+      "email-required": "Електронна адреса є обов'язковою",
+      "username-required": "Ім'я користувача є обов'язковим",
+      "password-required": "Пароль є обов'язковим",
+      "confirm-password-required": "Підтвердження пароля є обов'язковим",
+      "confirm-password-must-match": "Паролі мають співпадати"
+    }
+  },
   "auth": {
-    "errors":{
-      "unauthorized": "Please, login into the system"
+    "errors": {
+      "unauthorized": "Будь-ласка, авторизуйтесь"
     }
   }
 }

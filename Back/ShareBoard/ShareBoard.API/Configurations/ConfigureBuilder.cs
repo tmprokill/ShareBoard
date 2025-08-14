@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShareBoard.API.Exceptions;
+using ShareBoard.Application.Auth.Interfaces;
+using ShareBoard.Application.Auth.Services;
 using ShareBoard.Domain.Models.Auth;
 using ShareBoard.Infrastructure.Common.JWT;
 using ShareBoard.Infrastructure.Common.Mappers.Auth;
@@ -43,6 +45,7 @@ public static class ConfigureBuilder
                 options.User.RequireUniqueEmail = true;
             })
             .AddDefaultTokenProviders()
+            .AddRoles<IdentityRole<int>>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
         
         builder.Services.AddControllers();
@@ -73,6 +76,9 @@ public static class ConfigureBuilder
             });
         
         builder.Services.AddAutoMapper(cfg => cfg.AddProfile<AuthMappingProfile>());
+        builder.Services.AddScoped<ITokenService, TokenService>();
+        builder.Services.AddScoped<IRoleService, RoleService>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
     }
     
     private static void AddSwagger(this WebApplicationBuilder builder)

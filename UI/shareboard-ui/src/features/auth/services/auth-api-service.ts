@@ -22,12 +22,15 @@ export class AuthApiService {
   }
 
   async registerAsync(registerModel: RegisterModel): Promise<ApiResponse<null>> {
-    const res = await axiosClient.post<ApiResponse<null>>(
-      this.controller + "register",
-      registerModel
+    const res = await apiRequest<null>(
+      {
+        method: 'post',
+        url: this.controller + "/register",
+        data: registerModel
+      }
     );
 
-    return res.data;
+    return res;
   }
 
   async logoutAsync(): Promise<ApiResponse<null>> {

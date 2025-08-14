@@ -57,6 +57,7 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       AuthCookieService.removeAuthCookies();
     },
+    //invalidating a token means that the user will be unauthenticated
     setInvalidToken(state) {
       state.isTokenValid = false;
     }

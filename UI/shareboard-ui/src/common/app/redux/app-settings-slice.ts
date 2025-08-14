@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import i18n from '../../i18n';
-import { AppSettingDefaults } from '../constants';
+import i18n from '../../../i18n';
+import { AppSettingDefaults } from '../../constants';
 
 interface AppSettings {
   language: string;

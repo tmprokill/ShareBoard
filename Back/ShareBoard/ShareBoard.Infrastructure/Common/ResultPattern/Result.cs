@@ -14,6 +14,11 @@ public class Result
     
     public Error Error { get; protected set; }
     
+    public static Result Success()
+    {
+        return new Result(true, null);
+    }
+    
     public static Result Failure(Error error)
     {
         return new Result(false, error);
@@ -30,7 +35,7 @@ public class Result<T> : Result
         Value = value;
     }
 
-    public static Result<T> Success(T value)
+    public static Result<T> Success(T value, string message = "success")
     {
         return new Result<T>(true, value, null);
     }

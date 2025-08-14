@@ -7,7 +7,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./common/app/query-client.ts";
 import { BrowserRouter } from "react-router";
 import { Provider } from "react-redux";
-import { store } from "./common/app/store.ts";
+import { store } from "./common/app/redux/store.ts";
 import './i18n'
 
 createRoot(document.getElementById("root")!).render(

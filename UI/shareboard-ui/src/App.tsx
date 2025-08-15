@@ -15,15 +15,15 @@ import RegisterPage from "./features/auth/components/registerpage";
 function App() {
   const navigate = useNavigate();
   const {t} = useTranslation();
-  const isTokenValid = useSelector((state: AuthState) => state.isTokenValid);
+  const isAuthenticated = useSelector((state: AuthState) => state.isAuthenticated);
 
   useEffect(() => {
-    if (isTokenValid == false) {
+    if (isAuthenticated == false) {
       toast.error(t("auth.errors.unauthorized"));
       store.dispatch(unauthorize());
       navigate("/login");
     }
-  }, [isTokenValid, navigate, t]);
+  }, [isAuthenticated, navigate, t]);
 
   return (
     <>

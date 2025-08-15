@@ -4,7 +4,6 @@ import { AuthCookieService } from "./services/auth-cookie-service";
 import { AuthCookie } from "./models/authCookie";
 
 export interface AuthState {
-  isTokenValid: boolean;
   isAuthenticated: boolean;
   user?: AppUser;
 }
@@ -14,7 +13,6 @@ const initialState: AuthState = (() => {
 
   let user: AppUser | undefined;
   let isAuthenticated = false;
-  const isTokenValid = true;
 
   if (
     authCookie.jwt !== undefined &&
@@ -30,7 +28,7 @@ const initialState: AuthState = (() => {
     AuthCookieService.removeAuthCookies();
   }
 
-  return { isTokenValid, isAuthenticated, user };
+  return { isAuthenticated, user };
 })();
 
 const authSlice = createSlice({
@@ -57,13 +55,9 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       AuthCookieService.removeAuthCookies();
     },
-    //invalidating a token means that the user will be unauthenticated
-    setInvalidToken(state) {
-      state.isTokenValid = false;
-    }
   },
 });
 
 export default authSlice.reducer;
 
-export const { unauthorize, authorize, setInvalidToken } = authSlice.actions;
+export const { unauthorize, authorize } = authSlice.actions;

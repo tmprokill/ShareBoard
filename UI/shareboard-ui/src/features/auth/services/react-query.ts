@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AuthApiService } from "./auth-api-service";
-import { ApiResponse } from "../../../common/models/api-responses";
-import { LoginResponse } from "../models/login-response";
+import { ApiResponse, ProblemDetails } from "../../../common/models/api-responses";
+import { LoginResponse } from "../models/login";
 import { authorize } from "../auth-slice";
-import { LoginModel } from "../models/login-model";
-import { RegisterModel } from "../models/register-model";
+import { LoginModel } from "../models/login";
+import { RegisterModel } from "../models/register";
 import { toast } from "react-toastify";
 
 export function useLoginMutation() {
@@ -45,8 +45,11 @@ export function useRegisterMutation() {
         email: data.email,
         password: data.password,
       }),
-    onSuccess: () => {
-      toast.success("Check the inbox for the registration");
+    onSuccess: (response: ApiResponse<null>) => {
+      toast.success(response.message);
     },
+    onError: (error: ProblemDetails) => {
+      toast.error(error.detail);
+    }
   });
 }

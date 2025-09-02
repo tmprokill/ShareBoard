@@ -36,11 +36,7 @@ export async function apiRequest<T>(config: AxiosRequestConfig): Promise<ApiResp
         };
       }
     }
-
-    return {
-      success: false,
-      message: apiError.detail || apiError.title || "Unknown error",
-      error: apiError
-    };
+    
+    throw apiError;
   }
 }

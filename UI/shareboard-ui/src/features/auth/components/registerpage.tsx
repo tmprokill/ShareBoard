@@ -1,8 +1,10 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRegisterMutation } from "../services/react-query";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../common/app/redux/store";
 
 export interface RegisterFormValues {
   username: string;
@@ -11,10 +13,6 @@ export interface RegisterFormValues {
   confirmPassword: string;
 }
 
-
-//TODO FINISH ON THIS 
-//EXCEPTIONS (like 400) errors are being handlen in apirequestfile, that's why always call will success
-//decide on how to proceed with that stuff.
 function RegisterPage() {
   const registerMutation = useRegisterMutation();
   const [error, setError] = useState<string>("");
@@ -23,6 +21,7 @@ function RegisterPage() {
   const {
     watch,
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormValues>({
@@ -33,6 +32,14 @@ function RegisterPage() {
       confirmPassword: "",
     },
   });
+
+  const currentLanguage = useSelector(
+    (state: RootState) => state.appSettings.language
+  );
+
+  useEffect(() => {
+    reset({ email: "", username: "", password: "", confirmPassword: "" });
+  }, [currentLanguage, reset]);
 
   const password = watch("password");
 
@@ -104,7 +111,8 @@ function RegisterPage() {
             {...register("confirmPassword", {
               required: t("register.errors.confirm-password-required"),
               validate: (value) =>
-                value === password || t("register.errors.confirm-password-must-match"),
+                value === password ||
+                t("register.errors.confirm-password-must-match"),
             })}
             placeholder={t("register.placeholders.confirm-password")}
             type="password"

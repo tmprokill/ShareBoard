@@ -4,7 +4,7 @@ import { AuthState } from "../auth-slice";
 import { useNavigate } from "react-router";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { LoginModel } from "../models/login-model";
+import { LoginModel } from "../models/login";
 import { useLoginMutation } from "../services/react-query";
 import { useTranslation } from "react-i18next";
 

@@ -50,7 +50,7 @@ public class AuthService : IAuthService
     {
         var user = await _userManager.FindByEmailAsync(email);
         if (user == null)
-            return Result<int>.Failure(UserErrors.UserNotFoundError);
+            return Result<int>.Failure(UserErrors.UserNotFoundError());
 
         return Result<int>.Success(user.Id);
     }
@@ -64,7 +64,7 @@ public class AuthService : IAuthService
             return Result<IEnumerable<string>>.Success(roles);
         }
 
-        return Result<IEnumerable<string>>.Failure(UserErrors.UserNotFoundError);
+        return Result<IEnumerable<string>>.Failure(UserErrors.UserNotFoundError());
     }
 
     public async Task<Result<bool>> RegisterAsync(RegisterModel registerModel)
@@ -83,7 +83,7 @@ public class AuthService : IAuthService
             if (!userResult.Succeeded)
             {
                 await _context.Database.RollbackTransactionAsync();
-                return Result<bool>.Failure(UserErrors.UserNotCreatedError);
+                return Result<bool>.Failure(UserErrors.UserNotCreatedError(userResult.Errors.First().Description));
             }
             
             var resRolesResult = await _roleService.AddToRolesAsync(appUser, UserRoles.User);
@@ -92,7 +92,7 @@ public class AuthService : IAuthService
             if (resRolesResult == false)
             {
                 await _context.Database.RollbackTransactionAsync();
-                return Result<bool>.Failure(UserErrors.UserNotAssignedToRole);
+                return Result<bool>.Failure(UserErrors.UserNotAssignedToRole());
             }
             
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);

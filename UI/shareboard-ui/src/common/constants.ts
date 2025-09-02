@@ -7,7 +7,17 @@ export const CookieConstants = {
 export const AppSettingDefaults = {
   DEFAULT_LANGUAGE: "en",
   FALLBACK_LANGUAGE: "en",
-  THEME: "light",
+  DEFAULT_THEME: "light",
+};
+
+export const LanguageConstants = {
+  ENGLISH: 'en',
+  UKRAINIAN: 'uk'
+}
+
+export const ThemeConstants = {
+  LIGHT: "light",
+  DARK: "dark"
 };
 
 export const Routes = {

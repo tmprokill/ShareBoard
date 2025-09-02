@@ -16,7 +16,7 @@ function App() {
   const navigate = useNavigate();
   const {t} = useTranslation();
   const isAuthenticated = useSelector((state: AuthState) => state.isAuthenticated);
-
+  
   useEffect(() => {
     if (isAuthenticated == false) {
       toast.error(t("auth.errors.unauthorized"));
@@ -26,15 +26,17 @@ function App() {
   }, [isAuthenticated, navigate, t]);
 
   return (
-    <>
+    <div className="flex flex-col h-dvh">
       <Header />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-      </Routes>
+        <div className="min-h-8/10">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+          </Routes>
+        </div>
       <Footer />
-    </>
+    </div>
   );
 }
 

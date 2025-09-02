@@ -1,9 +1,9 @@
 import { axiosClient, getJWTHeader } from "../../../common/app/axios";
 import { ApiResponse } from "../../../common/models/api-responses";
-import { LoginResponse } from "../models/login-response";
-import { LoginModel } from "../models/login-model";
+import { LoginResponse } from "../models/login";
+import { LoginModel } from "../models/login";
 import { AuthCookieService } from "./auth-cookie-service";
-import { RegisterModel } from "../models/register-model";
+import { RegisterModel } from "../models/register";
 import { apiRequest } from "../../../common/services/api-request-handler";
 
 export class AuthApiService {

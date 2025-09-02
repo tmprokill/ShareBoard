@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { baseUrl } from "../constants";
-import { setInvalidToken } from "../../features/auth/auth-slice"
+import { unauthorize } from "../../features/auth/auth-slice"
 import { store } from "./redux/store";
 
 export function getJWTHeader(userToken: string): Record<string, string> {
@@ -14,7 +14,7 @@ axiosClient.interceptors.response.use(
   res => res,
   err => {
     if (err.response?.status === 401) {
-      store.dispatch(setInvalidToken());
+      store.dispatch(unauthorize());
     }
     return Promise.reject(err);
   }

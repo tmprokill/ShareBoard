@@ -8,6 +8,8 @@ export interface BaseTheme {
   secondary: string;
   border: string;
   surface: string;
+  error: string;
+  errortext: string;
 }
 
 interface Dictionary<T> {
@@ -22,6 +24,8 @@ export const themes: Dictionary<BaseTheme> = {
     secondary: "text-gray-600",
     border: "border-gray-300",
     surface: "bg-gray-100",
+    error: "bg-red-400",
+    errortext: "text-red-600"
   },
   dark: {
     background: "bg-gray-900",
@@ -30,6 +34,8 @@ export const themes: Dictionary<BaseTheme> = {
     secondary: "text-gray-400",
     border: "border-gray-700",
     surface: "bg-gray-800",
+    error: "bg-red-400",
+    errortext: "text-red-600"
   },
 };
 

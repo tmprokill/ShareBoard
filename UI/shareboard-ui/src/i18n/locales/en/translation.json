@@ -1,4 +1,9 @@
 {
+  "header": {
+    "register-button": "Register",
+    "login-button": "Login"
+  },
+
   "login": {
     "placeholders": {
       "login": "Enter the login",

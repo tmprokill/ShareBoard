@@ -14,9 +14,11 @@ import RegisterPage from "./features/auth/components/registerpage";
 
 function App() {
   const navigate = useNavigate();
-  const {t} = useTranslation();
-  const isAuthenticated = useSelector((state: AuthState) => state.isAuthenticated);
-  
+  const { t } = useTranslation();
+  const isAuthenticated = useSelector(
+    (state: AuthState) => state.isAuthenticated
+  );
+
   useEffect(() => {
     if (isAuthenticated == false) {
       toast.error(t("auth.errors.unauthorized"));
@@ -26,17 +28,19 @@ function App() {
   }, [isAuthenticated, navigate, t]);
 
   return (
-    <div className="flex flex-col h-dvh">
-      <Header />
-        <div className="min-h-8/10">
+    <>
+      <div className="min-h-screen">
+        <Header />
+        <main className="h-full">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Routes>
-        </div>
+        </main>
+      </div>
       <Footer />
-    </div>
+    </>
   );
 }
 

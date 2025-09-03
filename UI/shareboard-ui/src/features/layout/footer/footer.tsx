@@ -1,3 +1,3 @@
 export function Footer() {
-  return <div className="h-1/10">Footer is here</div>;
+  return <div className="block h-16 bg-red-500">Footer is here</div>;
 }

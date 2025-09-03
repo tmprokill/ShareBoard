@@ -5,6 +5,7 @@ import { useRegisterMutation } from "../services/react-query";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../common/app/redux/store";
+import { useTheme } from "../../../common/app/theme";
 
 export interface RegisterFormValues {
   username: string;
@@ -18,6 +19,7 @@ function RegisterPage() {
   const [error, setError] = useState<string>("");
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const theme = useTheme();
   const {
     watch,
     register,
@@ -59,10 +61,10 @@ function RegisterPage() {
   };
 
   return (
-    <>
+    <div className={`h-full content-center ${theme.background}`}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 max-w-sm mx-auto p-6 border rounded shadow"
+        className={`flex flex-col gap-4 max-w-sm mx-auto p-6 rounded shadow ${theme.border} ${theme.surface}`}
       >
         <div className="flex flex-col">
           <input
@@ -70,26 +72,30 @@ function RegisterPage() {
               required: t("register.errors.email-required"),
             })}
             placeholder={t("register.placeholders.email")}
-            className="border p-2 rounded"
+            className={`p-2 rounded ${theme.border} ${theme.background} ${theme.text}`}
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            <p className={`text-sm mt-1 ${theme.errortext}`}>
+              {errors.email.message}
+            </p>
           )}
         </div>
+
         <div className="flex flex-col">
           <input
             {...register("username", {
               required: t("register.errors.username-required"),
             })}
             placeholder={t("register.placeholders.username")}
-            className="border p-2 rounded"
+            className={`p-2 rounded ${theme.border} ${theme.background} ${theme.text}`}
           />
           {errors.username && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className={`text-sm mt-1 ${theme.errortext}`}>
               {errors.username.message}
             </p>
           )}
         </div>
+
         <div className="flex flex-col">
           <input
             {...register("password", {
@@ -97,10 +103,10 @@ function RegisterPage() {
             })}
             placeholder={t("register.placeholders.password")}
             type="password"
-            className="border p-2 rounded"
+            className={`p-2 rounded ${theme.border} ${theme.background} ${theme.text}`}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className={`text-sm mt-1 ${theme.errortext}`}>
               {errors.password.message}
             </p>
           )}
@@ -116,10 +122,10 @@ function RegisterPage() {
             })}
             placeholder={t("register.placeholders.confirm-password")}
             type="password"
-            className="border p-2 rounded"
+            className={`p-2 rounded ${theme.border} ${theme.background} ${theme.text}`}
           />
           {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className={`text-sm mt-1 ${theme.errortext}`}>
               {errors.confirmPassword.message}
             </p>
           )}
@@ -127,17 +133,16 @@ function RegisterPage() {
 
         <button
           type="submit"
-          className="bg-blue-600 text-black-500 py-2 rounded hover:bg-blue-700"
+          className={`py-2 rounded hover:opacity-80 transition ${theme.primary} ${theme.text}`}
         >
-          {t("login.buttons.login-submit")}
+          {t("register.buttons.register-submit")}
         </button>
       </form>
 
       {error !== "" && (
-        <p className="text-black-600 text-center mt-2">{error}</p>
+        <p className={`text-center mt-2 ${theme.errortext}`}>{error}</p>
       )}
-    </>
+    </div>
   );
 }
-
 export default RegisterPage;

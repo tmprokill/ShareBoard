@@ -12,8 +12,8 @@ export class AuthApiService {
   async loginAsync(loginModel: LoginModel): Promise<ApiResponse<LoginResponse>> {
     const res = await apiRequest<LoginResponse>(
       {
-        method: 'get',
-        url: this.controller + "/auth",
+        method: 'post',
+        url: this.controller + "/login",
         data: loginModel
       }
     );

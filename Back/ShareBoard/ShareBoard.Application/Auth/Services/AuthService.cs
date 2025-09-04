@@ -4,6 +4,7 @@ using ShareBoard.Application.Auth.Interfaces;
 using ShareBoard.Domain.Models;
 using ShareBoard.Domain.Models.Auth;
 using ShareBoard.Domain.Models.DTOS.Auth.Models;
+using ShareBoard.Domain.Models.DTOS.Auth.Responses;
 using ShareBoard.Infrastructure.Common.Errors.Repository;
 using ShareBoard.Infrastructure.Common.Errors.User;
 using ShareBoard.Infrastructure.Common.JWT;
@@ -21,16 +22,16 @@ public class AuthService : IAuthService
     private readonly ITokenService _tokenService;
 
     private readonly IRoleService _roleService;
-    
+
     private readonly ApplicationDbContext _context;
 
     public AuthService(
-        SignInManager<ApplicationUser> signInManager, 
+        SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager,
-        ITokenService tokenService, 
+        ITokenService tokenService,
         IRoleService roleService,
         ApplicationDbContext context
-        )
+    )
     {
         _signInManager = signInManager;
         _userManager = userManager;
@@ -39,11 +40,11 @@ public class AuthService : IAuthService
         _context = context;
     }
 
-    private Result<string> GenerateToken(ApplicationUser user)
+    private string GenerateToken(ApplicationUser user)
     {
         var token = _tokenService.GenerateToken(user);
-        
-        return Result<string>.Success(token);
+
+        return token;
     }
 
     public async Task<Result<int>> GetIdByEmail(string email)
@@ -77,27 +78,27 @@ public class AuthService : IAuthService
                 UserName = registerModel.UserName,
                 Email = registerModel.Email,
             };
-    
+
             var userResult = await _userManager.CreateAsync(appUser, registerModel.Password);
-    
+
             if (!userResult.Succeeded)
             {
                 await _context.Database.RollbackTransactionAsync();
                 return Result<bool>.Failure(UserErrors.UserNotCreatedError(userResult.Errors.First().Description));
             }
-            
+
             var resRolesResult = await _roleService.AddToRolesAsync(appUser, UserRoles.User);
-    
+
 
             if (resRolesResult == false)
             {
                 await _context.Database.RollbackTransactionAsync();
                 return Result<bool>.Failure(UserErrors.UserNotAssignedToRole());
             }
-            
+
             var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
             //await _emailService.SendConfirmationLinkAsync(user.Email, emailToken);
-            
+
             await _context.Database.CommitTransactionAsync();
             return Result<bool>.Success(true);
         }
@@ -107,6 +108,7 @@ public class AuthService : IAuthService
             return Result<bool>.Failure(RepositoryErrorMapper<ApplicationUser>.Map(ex));
         }
     }
+
     //
     // public async Task<Result<string>> ConfirmEmailAsync(string email, string token)
     // {
@@ -126,33 +128,40 @@ public class AuthService : IAuthService
     //     await _emailService.SendEmailAsync(email, "Account Was successfully Activated", "Account Activated");
     //     return Result<string>.Success("Account Activated");
     // }
-    //
-    // public async Task<Result<LoginResponseDTO>> LoginAsync(string email, string password)
-    // {
-    //     var user = await _userManager.FindByEmailAsync(email);
-    //     if (user is null)
-    //     {
-    //         return Result<LoginResponseDTO>.Failure("User was not found");
-    //     }
-    //
-    //     if (!await _userManager.IsEmailConfirmedAsync(user))
-    //     {
-    //         return Result<LoginResponseDTO>.Failure("Email is not confirmed");
-    //     }
-    //
-    //     var result = await _userManager.CheckPasswordAsync(user, password);
-    //     if (result)
-    //     {
-    //         return GenerateToken(user);
-    //     }
-    //
-    //     if (await _userManager.IsLockedOutAsync(user))
-    //     {
-    //         return Result<LoginResponseDTO>.Failure("Account locked out");
-    //     }
-    //
-    //     return Result<LoginResponseDTO>.Failure("Wrong email or password, Try again.");
-    // }
+
+    public async Task<Result<LoginResponse>> LoginAsync(LoginModel loginModel)
+    {
+        var user = await _userManager.FindByEmailAsync(loginModel.Login) ??
+                   await _userManager.FindByNameAsync(loginModel.Login);
+        
+        if (user is null)
+        {
+            return Result<LoginResponse>.Failure(UserErrors.UserNotFoundError());
+        }
+
+        if (!await _userManager.IsEmailConfirmedAsync(user))
+        {
+            return Result<LoginResponse>.Failure(UserErrors.UserEmailNotConfirmed());
+        }
+
+        var result = await _userManager.CheckPasswordAsync(user, loginModel.Password);
+        if (result)
+        {
+            return Result<LoginResponse>.Success(new LoginResponse
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                Token = GenerateToken(user)
+            });
+        }
+
+        if (await _userManager.IsLockedOutAsync(user))
+        {
+            return Result<LoginResponse>.Failure(UserErrors.UserLockedOut());
+        }
+
+        return Result<LoginResponse>.Failure(UserErrors.UserInvalidCredentials());
+    }
     //
     // public async Task<Result<string>> LogoutAsync()
     // {

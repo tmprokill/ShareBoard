@@ -5,6 +5,6 @@ export interface LoginModel {
 
 export interface LoginResponse{
     email: string,
-    username: string,
-    jwt: string
+    userName: string,
+    token: string
 }

@@ -1,4 +1,8 @@
 {
+  "header": {
+    "register-button": "Зареєструватися",
+    "login-button": "Увійти"
+  },
   "login": {
     "placeholders": {
       "login": "Введіть логін",
@@ -10,6 +14,9 @@
     "errors": {
       "login-required": "Поле логіну є обов’язковим",
       "password-required": "Поле паролю є обов’язковим"
+    },
+    "messages": {
+      "successful-login": "Ви успішно увійшли до свого акаунту"
     }
   },
   "register": {
@@ -28,11 +35,20 @@
       "password-required": "Пароль є обов'язковим",
       "confirm-password-required": "Підтвердження пароля є обов'язковим",
       "confirm-password-must-match": "Паролі мають співпадати"
+    },
+    "messages": {
+      "successful-registration": "Реєстрація успішна, будь-ласка авторизуйтесь"
     }
   },
   "auth": {
     "errors": {
       "unauthorized": "Будь-ласка, авторизуйтесь"
+    }
+  },
+  "appsettings": {
+    "theme": {
+      "dark": "Темна",
+      "light": "Світла"
     }
   }
 }

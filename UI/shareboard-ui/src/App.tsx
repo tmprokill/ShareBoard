@@ -29,9 +29,9 @@ function App() {
 
   return (
     <>
-      <div className="min-h-screen">
+      <div className="min-h-screen flex flex-col">
         <Header />
-        <main className="h-full">
+        <main className="flex flex-1">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />

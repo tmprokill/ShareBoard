@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { AuthState } from "../auth-slice";
 import { useNavigate } from "react-router";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LoginModel } from "../models/login";
 import { useLoginMutation } from "../services/react-query";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../../common/app/theme";
+import { toast } from "react-toastify";
+import { RootState } from "../../../common/app/redux/store";
 
 function LoginPage() {
   const loginMutation = useLoginMutation();
+  const theme = useTheme();
   const [error, setError] = useState<string>("");
   const { t } = useTranslation();
   const {
@@ -30,6 +33,7 @@ function LoginPage() {
     });
 
     if (result.success == true) {
+      toast.success(t("login.messages.successful-login"));
       navigate("/");
       return;
     } else {
@@ -38,22 +42,22 @@ function LoginPage() {
   };
 
   const isAuthenticated = useSelector(
-    (state: AuthState) => state.isAuthenticated
+    (state: RootState) => state.auth.isAuthenticated
   );
+
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) {
-      //return to homepage if authenticated
       navigate("/");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, t]);
 
   return (
-    <>
+    <div className={`w-full content-center ${theme.background}`}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 max-w-sm mx-auto p-6 border rounded shadow"
+        className={`flex flex-col gap-4 max-w-sm mx-auto p-6 rounded shadow ${theme.border} ${theme.surface}`}
       >
         <div className="flex flex-col">
           <input
@@ -61,10 +65,12 @@ function LoginPage() {
               required: t("login.errors.login-required"),
             })}
             placeholder={t("login.placeholders.login")}
-            className="border p-2 rounded"
+            className={`p-2 rounded ${theme.border} ${theme.background} ${theme.text}`}
           />
           {errors.login && (
-            <p className="text-red-500 text-sm mt-1">{errors.login.message}</p>
+            <p className={`text-sm mt-1 ${theme.errortext}`}>
+              {errors.login.message}
+            </p>
           )}
         </div>
 
@@ -75,10 +81,10 @@ function LoginPage() {
             })}
             placeholder={t("login.placeholders.password")}
             type="password"
-            className="border p-2 rounded"
+            className={`p-2 rounded ${theme.border} ${theme.background} ${theme.text}`}
           />
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className={`text-sm mt-1 ${theme.errortext}`}>
               {errors.password.message}
             </p>
           )}
@@ -86,14 +92,14 @@ function LoginPage() {
 
         <button
           type="submit"
-          className="bg-blue-600 text-red-500 py-2 rounded hover:bg-blue-700"
+          className={`py-2 rounded hover:opacity-80 transition ${theme.primary} ${theme.text}`}
         >
           {t("login.buttons.login-submit")}
         </button>
       </form>
 
-      {error !== "" && <p className="text-red-600 text-center mt-2">{error}</p>}
-    </>
+      {error !== "" && <p className={`${theme.errortext} mt-2`}>{error}</p>}
+    </div>
   );
 }
 

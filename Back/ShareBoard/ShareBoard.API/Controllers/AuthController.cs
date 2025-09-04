@@ -19,13 +19,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> LoginAsync()
+    public async Task<IActionResult> LoginAsync([FromBody] LoginModel model)
     {
-        var result = Result<int>.Success(2);
+        var result = await _authService.LoginAsync(model);
 
         return result.Match(
             successStatusCode: 200,
-            includeBody: false,
+            includeBody: true,
             message: "null",
             failure: ApiResults.ToProblemDetails
         );

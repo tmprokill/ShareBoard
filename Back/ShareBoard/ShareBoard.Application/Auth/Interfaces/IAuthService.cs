@@ -2,6 +2,7 @@
 using ShareBoard.Domain.Models;
 using ShareBoard.Domain.Models.Auth;
 using ShareBoard.Domain.Models.DTOS.Auth.Models;
+using ShareBoard.Domain.Models.DTOS.Auth.Responses;
 using ShareBoard.Infrastructure.Common.Errors.Repository;
 using ShareBoard.Infrastructure.Common.Errors.User;
 using ShareBoard.Infrastructure.Common.ResultPattern;
@@ -15,4 +16,6 @@ public interface IAuthService
     public Task<Result<IEnumerable<string>>> GetRolesByEmail(string email);
 
     public Task<Result<bool>> RegisterAsync(RegisterModel registerModel);
+    
+    public Task<Result<LoginResponse>> LoginAsync(LoginModel loginModel);
 }

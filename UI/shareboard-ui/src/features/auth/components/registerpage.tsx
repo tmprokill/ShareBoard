@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../common/app/redux/store";
 import { useTheme } from "../../../common/app/theme";
+import { toast } from "react-toastify";
 
 export interface RegisterFormValues {
   username: string;
@@ -20,6 +21,9 @@ function RegisterPage() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const theme = useTheme();
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
   const {
     watch,
     register,
@@ -43,6 +47,12 @@ function RegisterPage() {
     reset({ email: "", username: "", password: "", confirmPassword: "" });
   }, [currentLanguage, reset]);
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate, t]);
+
   const password = watch("password");
 
   const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
@@ -53,7 +63,8 @@ function RegisterPage() {
     });
 
     if (result.success == true) {
-      navigate("/");
+      toast.success(t("register.messages.successful-registration"));
+      navigate("/login");
       return;
     } else {
       setError(result.message);
@@ -61,7 +72,7 @@ function RegisterPage() {
   };
 
   return (
-    <div className={`h-full content-center ${theme.background}`}>
+    <div className={`w-full content-center ${theme.background}`}>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className={`flex flex-col gap-4 max-w-sm mx-auto p-6 rounded shadow ${theme.border} ${theme.surface}`}

@@ -3,7 +3,6 @@
     "register-button": "Register",
     "login-button": "Login"
   },
-
   "login": {
     "placeholders": {
       "login": "Enter the login",
@@ -15,6 +14,9 @@
     "errors": {
       "login-required": "The login field is required",
       "password-required": "The password field is required"
+    },
+    "messages": {
+      "successful-login": "You've successfully authenticated"
     }
   },
   "register": {
@@ -33,11 +35,20 @@
       "password-required": "Password is required",
       "confirm-password-required": "Confirm password is required",
       "confirm-password-must-match": "Confirm password must match"
+    },
+    "messages": {
+      "successful-registration": "Successful registration, now proceed with authorization"
     }
   },
   "auth": {
     "errors": {
       "unauthorized": "Please, login into the system"
+    }
+  },
+  "appsettings": {
+    "theme": {
+      "dark": "Dark",
+      "light": "Light"
     }
   }
 }

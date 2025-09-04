@@ -34,10 +34,26 @@ export function Header() {
     dispatch(setTheme(themeValue));
 
   const languageDropdownOptions = [
-    LanguageConstants.ENGLISH,
-    LanguageConstants.UKRAINIAN,
+    {
+      option: LanguageConstants.ENGLISH,
+      label: 'English',
+    },
+    {
+      option: LanguageConstants.UKRAINIAN,
+      label: 'Українська',
+    },
   ];
-  const themeDropdownOptions = [ThemeConstants.DARK, ThemeConstants.LIGHT];
+
+  const themeDropdownOptions = [
+    {
+      option: ThemeConstants.DARK,
+      label: `appsettings.theme.${ThemeConstants.DARK}`,
+    },
+    {
+      option: ThemeConstants.LIGHT,
+      label: `appsettings.theme.${ThemeConstants.LIGHT}`,
+    },
+  ];
 
   return (
     <header

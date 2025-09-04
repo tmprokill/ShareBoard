@@ -23,6 +23,7 @@ const initialState: AuthState = (() => {
     user = {
       username: authCookie.username,
       email: authCookie.email,
+      jwt: authCookie.jwt
     };
   } else {
     AuthCookieService.removeAuthCookies();
@@ -43,6 +44,7 @@ const authSlice = createSlice({
       state.user = {
         username: action.payload.username,
         email: action.payload.email,
+        jwt: action.payload.jwt
       };
       AuthCookieService.setAuthCookies({
         jwt: action.payload.jwt,
